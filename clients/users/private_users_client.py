@@ -6,7 +6,10 @@ from clients.api_client import APIClient # импортирую класс
 
 from typing import TypedDict # импорт библиотеки для словаря
 
-from clients.private_http_builder import AuthenticationUserDict
+from clients.private_http_builder import (
+    AuthenticationUserDict,
+    get_private_http_builder,
+)
 
 
 class UpdateUserRequest(TypedDict): # писание структуры запроса для обновления пользователя
@@ -56,9 +59,8 @@ class PrivateUsersClient(APIClient):  #объявляю новый класс и
         return  self.delete(f"api/v1/users/{user_id}")
 
 
-# Добавляем builder для PrivateUsersClient
-def get_private_http_client(user):
-    pass
+def get_private_http_client(user: AuthenticationUserDict):
+    return get_private_http_builder(user)
 
 
 def get_private_users_client(user: AuthenticationUserDict) -> PrivateUsersClient:

@@ -1,4 +1,3 @@
-from fastapi import params
 from httpx import Client, URL, QueryParams, Response
 from typing import  Any
 
