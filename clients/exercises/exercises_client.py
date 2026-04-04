@@ -1,14 +1,14 @@
 from httpx import Response
-from typing import TypedDict
+from pydantic import BaseModel, Field
 
 from clients.api_client import  APIClient
 
-class GetExercisesQueryDict(TypedDict):
+class GetExercisesQuerySchema(BaseModel):
 
     """Описание структуры запроса на получение списка заданий."""
     courseId: str
 
-class CreateExerciseRequestDict(TypedDict):
+class CreateExerciseRequestSchema(BaseModel):
     """Описание запросса на создание задания"""
 
     title: str
@@ -20,7 +20,7 @@ class CreateExerciseRequestDict(TypedDict):
     estimatedTime: str
 
 
-class UpdateExerciseRequestDict(TypedDict):
+class UpdateExerciseRequestSchema(BaseModel):
     """Описание запроса на обновление задания"""
 
     title: str
@@ -31,7 +31,7 @@ class UpdateExerciseRequestDict(TypedDict):
     estimatedTime: str
 
 
-class DeleteExerciseDict(TypedDict):
+class DeleteExerciseSchema(BaseModel):
     """Описание структуры запроса на удаление задания по его ID"""
     courseId: str
 
@@ -39,7 +39,7 @@ class DeleteExerciseDict(TypedDict):
 class ExercisesClient(APIClient):
     """Клиент для работы с /api/v1/exercises"""
 
-    def get_exercises_api(self, query: GetExercisesQueryDict) -> Response:
+    def get_exercises_api(self, query: GetExercisesQuerySchema) -> Response:
         """Метод получения списка заданий"""
         return self.client.get("/api/v1/exercises", params=query)
 
@@ -48,7 +48,7 @@ class ExercisesClient(APIClient):
 
         return self.client.get(f"/api/v1/exercises/ {exercise_id}")
 
-    def create_exercise_api(self, request: CreateExerciseRequestDict) -> Response:
+    def create_exercise_api(self, request: CreateExerciseRequestSchema) -> Response:
         """
         Метод создания задания.
 
@@ -57,7 +57,7 @@ class ExercisesClient(APIClient):
         """
         return self.post("/api/v1/exercises", json=request)
 
-    def update_exercise_api(self, exercise_id: str, request: UpdateExerciseRequestDict) -> Response:
+    def update_exercise_api(self, exercise_id: str, request: UpdateExerciseRequestSchema) -> Response:
         """
         Метод обновления задания.
 

@@ -7,7 +7,7 @@ from clients.api_client import APIClient # импортирую класс
 from typing import TypedDict # импорт библиотеки для словаря
 
 from clients.private_http_builder import (
-    AuthenticationUserDict,
+    AuthenticationUserSchema,
     get_private_http_builder,
 )
 
@@ -59,11 +59,11 @@ class PrivateUsersClient(APIClient):  #объявляю новый класс и
         return  self.delete(f"api/v1/users/{user_id}")
 
 
-def get_private_http_client(user: AuthenticationUserDict):
+def get_private_http_client(user: AuthenticationUserSchema):
     return get_private_http_builder(user)
 
 
-def get_private_users_client(user: AuthenticationUserDict) -> PrivateUsersClient:
+def get_private_users_client(user: AuthenticationUserSchema) -> PrivateUsersClient:
     """
     Функция создаёт экземпляр PrivateUsersClient с уже настроенным HTTP-клиентом.
 

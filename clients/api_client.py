@@ -36,7 +36,7 @@ class APIClient:
                 """
         return self.client.post(url, data=data, files=files, json=json)
 
-    def patch(self, url:URL | str, json:Any | None =None) -> Response:
+    def patch(self, url:URL | str, json:Any | None = None) -> Response:
         """
                 Выполняет PATCH-запрос (частичное обновление данных).
 

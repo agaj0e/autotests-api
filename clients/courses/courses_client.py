@@ -1,20 +1,20 @@
-from typing import TypedDict
+from pydantic import BaseModel, Field
 
 from httpx import Response
 
 from clients.api_client import APIClient
-from clients.private_http_builder import AuthenticationUserDict
+from clients.private_http_builder import AuthenticationUserSchema
 from clients.users.private_users_client import get_private_http_client
 
 
-class GetCoursesQueryDict(TypedDict):
+class GetCoursesQuerySchema(BaseModel):
     """
     Описание структуры запроса на получение списка курсов.
     """
     userId: str
 
 
-class CreateCourseRequestDict(TypedDict):
+class CreateCourseRequestSchema(BaseModel):
     """
     Описание структуры запроса на создание курса.
     """
@@ -27,7 +27,7 @@ class CreateCourseRequestDict(TypedDict):
     createdByUserId: str
 
 
-class UpdateCourseRequestDict(TypedDict):
+class UpdateCourseRequestSchema(BaseModel):
     """
     Описание структуры запроса на обновление курса.
     """
@@ -43,7 +43,7 @@ class CoursesClient(APIClient):
     Клиент для работы с /api/v1/courses
     """
 
-    def get_courses_api(self, query: GetCoursesQueryDict) -> Response:
+    def get_courses_api(self, query: GetCoursesQuerySchema) -> Response:
         """
         Метод получения списка курсов.
 
@@ -61,7 +61,7 @@ class CoursesClient(APIClient):
         """
         return self.get(f"/api/v1/courses/{course_id}")
 
-    def create_course_api(self, request: CreateCourseRequestDict) -> Response:
+    def create_course_api(self, request: CreateCourseRequestSchema) -> Response:
         """
         Метод создания курса.
 
@@ -71,7 +71,7 @@ class CoursesClient(APIClient):
         """
         return self.post("/api/v1/courses", json=request)
 
-    def update_course_api(self, course_id: str, request: UpdateCourseRequestDict) -> Response:
+    def update_course_api(self, course_id: str, request: UpdateCourseRequestSchema) -> Response:
         """
         Метод обновления курса.
 
@@ -92,10 +92,11 @@ class CoursesClient(APIClient):
 
 
 # Добавляем builder для CoursesClient
-def get_courses_client(user: AuthenticationUserDict) -> CoursesClient:
+def get_courses_client(user: AuthenticationUserSchema) -> CoursesClient:
     """
     Функция создаёт экземпляр CoursesClient с уже настроенным HTTP-клиентом.
 
     :return: Готовый к использованию CoursesClient.
     """
     return CoursesClient(client=get_private_http_client(user))
+

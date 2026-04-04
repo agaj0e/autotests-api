@@ -1,13 +1,13 @@
-from typing import TypedDict
+from  pydantic import BaseModel
 
 from httpx import Response
 
 from clients.api_client import APIClient
-from clients.private_http_builder import AuthenticationUserDict
+from clients.private_http_builder import AuthenticationUserSchema
 from clients.users.private_users_client import get_private_http_client
 
 
-class CreateFileRequsetDict(TypedDict):
+class CreateFileRequsetDict(BaseModel):
     """Структура запроса на создание файла"""
     filename: str
     directory: str
@@ -37,7 +37,7 @@ class FilesClient(APIClient):
 
 
 # Добавляем builder для FilesClient
-def get_files_client(user: AuthenticationUserDict) -> FilesClient:
+def get_files_client(user: AuthenticationUserSchema) -> FilesClient:
     """
     Функция создаёт экземпляр FilesClient с уже настроенным HTTP-клиентом.
 
