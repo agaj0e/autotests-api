@@ -33,5 +33,5 @@ def get_private_http_builder(user: AuthenticationUserSchema) -> Client:
     )
 
 
-def get_private_http_client():
-    return None
+def get_private_http_client(user: AuthenticationUserSchema) -> Client:
+    return get_private_http_builder(user)
