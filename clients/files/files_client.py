@@ -52,4 +52,4 @@ def get_files_client(user: AuthenticationUserSchema) -> FilesClient:
 
     :return: Готовый к использованию FilesClient.
     """
-    return FilesClient(client=get_private_http_client())
+    return FilesClient(client=get_private_http_client(user))
