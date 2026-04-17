@@ -31,3 +31,7 @@ def get_private_http_builder(user: AuthenticationUserSchema) -> Client:
             "Authorization": f"Bearer {login_response.token.access_token}"
         },
     )
+
+
+def get_private_http_client():
+    return None

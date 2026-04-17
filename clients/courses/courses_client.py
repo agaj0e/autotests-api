@@ -23,7 +23,7 @@ class CreateCourseRequestSchema(BaseModel):
     minScore: int
     description: str
     estimatedTime: str
-    previewFileId: str
+    previewFileId: str | None = None
     createdByUserId: str
 
 
