@@ -1,41 +1,9 @@
-from pydantic import BaseModel, Field
-
 from httpx import Response
 
 from clients.api_client import APIClient
-from clients.private_http_builder import AuthenticationUserSchema
-from clients.users.private_users_client import get_private_http_client
-
-
-class GetCoursesQuerySchema(BaseModel):
-    """
-    Описание структуры запроса на получение списка курсов.
-    """
-    userId: str
-
-
-class CreateCourseRequestSchema(BaseModel):
-    """
-    Описание структуры запроса на создание курса.
-    """
-    title: str
-    maxScore: int
-    minScore: int
-    description: str
-    estimatedTime: str
-    previewFileId: str | None = None
-    createdByUserId: str
-
-
-class UpdateCourseRequestSchema(BaseModel):
-    """
-    Описание структуры запроса на обновление курса.
-    """
-    title: str | None
-    maxScore: int | None
-    minScore: int | None
-    description: str | None
-    estimatedTime: str | None
+from clients.courses.courses_schema import GetCoursesQuerySchema, CreateCourseRequestSchema, UpdateCourseRequestSchema, \
+    CreateCourseResponseSchema
+from clients.private_http_builder import AuthenticationUserSchema, get_private_http_client
 
 
 class CoursesClient(APIClient):
@@ -50,7 +18,7 @@ class CoursesClient(APIClient):
         :param query: Словарь с userId.
         :return: Ответ от сервера в виде объекта httpx.Response
         """
-        return self.get("/api/v1/courses", params=query)
+        return self.get("/api/v1/courses", params=query.model_dump(by_alias=True))
 
     def get_course_api(self, course_id: str) -> Response:
         """
@@ -61,7 +29,7 @@ class CoursesClient(APIClient):
         """
         return self.get(f"/api/v1/courses/{course_id}")
 
-    def create_course(self, request: CreateCourseRequestSchema) -> Response:
+    def create_course_api(self, request: CreateCourseRequestSchema) -> Response:
         """
         Метод создания курса.
 
@@ -79,7 +47,10 @@ class CoursesClient(APIClient):
         :param request: Словарь с title, maxScore, minScore, description, estimatedTime.
         :return: Ответ от сервера в виде объекта httpx.Response
         """
-        return self.patch(f"/api/v1/courses/{course_id}", json=request.model_dump(by_alias=True))
+        return self.patch(
+            f"/api/v1/courses/{course_id}",
+            json=request.model_dump(by_alias=True)
+        )
 
     def delete_course_api(self, course_id: str) -> Response:
         """
@@ -90,8 +61,11 @@ class CoursesClient(APIClient):
         """
         return self.delete(f"/api/v1/courses/{course_id}")
 
+    def create_course(self, request: CreateCourseRequestSchema) -> CreateCourseResponseSchema:
+        response = self.create_course_api(request)
+        return CreateCourseResponseSchema.model_validate_json(response.text)
 
-# Добавляем builder для CoursesClient
+
 def get_courses_client(user: AuthenticationUserSchema) -> CoursesClient:
     """
     Функция создаёт экземпляр CoursesClient с уже настроенным HTTP-клиентом.
@@ -99,4 +73,3 @@ def get_courses_client(user: AuthenticationUserSchema) -> CoursesClient:
     :return: Готовый к использованию CoursesClient.
     """
     return CoursesClient(client=get_private_http_client(user))
-
