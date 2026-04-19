@@ -1,9 +1,9 @@
 import httpx
 
-from tools.fakers import random_email
+from tools.fakers import fake
 
 create_user_payload = {
-  "email": random_email(),
+  "email": fake.email(),
   "password": "what",
   "lastName": "string",
   "firstName": "string",
@@ -26,7 +26,7 @@ print(f"Ответ на логин с имеющимися данными:{login
 
 
 patch_data = {
-  "email":random_email(),
+  "email": fake.email(),
   "lastName": "string",
   "firstName": "kkkkaaat",
   "middleName": "string"
