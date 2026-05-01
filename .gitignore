@@ -5,3 +5,4 @@ venv/
 exercises/
 .idea/
 pyvenv.cfg
+.env
